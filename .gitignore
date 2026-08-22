@@ -1,17 +1,22 @@
-# Ignore massive datasets
-*.csv
-*.zip
-
-# Ignore Python cache and virtual environments
 __pycache__/
 *.py[cod]
-*$py.class
-venv/
-env/
+
 .env
+.venv/
+venv/
 
-# Ignore Jupyter Notebook checkpoints
-.ipynb_checkpoints/
+uploads/
+instance/
 
-# Ignore Mac OS hidden files (if applicable)
+*.sqlite3
+*.db
+
+.vscode/
+.idea/
+
 .DS_Store
+Thumbs.db
+
+*.log
+
+model/*.pkl
