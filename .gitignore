@@ -20,3 +20,6 @@ Thumbs.db
 *.log
 
 model/*.pkl
+
+test_temp/
+.pytest_cache/
