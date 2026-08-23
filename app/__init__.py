@@ -1,7 +1,8 @@
-from flask import Flask
+from flask import Flask, jsonify
+from werkzeug.exceptions import RequestEntityTooLarge
 
 from app.extensions import db, jwt, migrate
-from app.models import Business, User  # noqa: F401
+from app.models import Business, SalesRecord, Upload, User  # noqa: F401
 from app.routes import api_blueprint
 from config import Config
 
@@ -18,5 +19,9 @@ def create_app(test_config=None):
     jwt.init_app(app)
 
     app.register_blueprint(api_blueprint, url_prefix="/api")
+
+    @app.errorhandler(RequestEntityTooLarge)
+    def handle_upload_too_large(_error):
+        return jsonify({"error": "The uploaded file is too large."}), 413
 
     return app

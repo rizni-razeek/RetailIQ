@@ -19,3 +19,13 @@ class Business(db.Model):
         back_populates="business",
         cascade="all, delete-orphan",
     )
+    uploads = db.relationship(
+        "Upload",
+        back_populates="business",
+        cascade="all, delete-orphan",
+    )
+    sales_records = db.relationship(
+        "SalesRecord",
+        back_populates="business",
+        cascade="all, delete-orphan",
+    )

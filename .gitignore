@@ -23,3 +23,5 @@ model/*.pkl
 
 test_temp/
 .pytest_cache/
+.pytest_tmp/
+docs/test_sales_upload.csv
