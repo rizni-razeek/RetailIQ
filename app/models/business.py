@@ -29,3 +29,13 @@ class Business(db.Model):
         back_populates="business",
         cascade="all, delete-orphan",
     )
+    forecast_runs = db.relationship(
+        "ForecastRun",
+        back_populates="business",
+        cascade="all, delete-orphan",
+    )
+    forecasts = db.relationship(
+        "Forecast",
+        back_populates="business",
+        cascade="all, delete-orphan",
+    )

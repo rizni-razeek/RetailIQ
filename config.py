@@ -23,3 +23,4 @@ class Config:
     MAX_CONTENT_LENGTH = int(os.getenv("MAX_UPLOAD_SIZE_MB", "10")) * 1024 * 1024
     UPLOAD_FOLDER = DEFAULT_UPLOAD_FOLDER
     MODEL_PATH = BASE_DIR / "model" / "retailiq_final_model.pkl"
+    FORECAST_FUTURE_ONPROMOTION = 0.0

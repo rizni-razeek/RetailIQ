@@ -29,6 +29,11 @@ class Upload(db.Model):
         back_populates="upload",
         cascade="all, delete-orphan",
     )
+    forecast_runs = db.relationship(
+        "ForecastRun",
+        back_populates="upload",
+        cascade="all, delete-orphan",
+    )
 
     def to_dict(self):
         return {

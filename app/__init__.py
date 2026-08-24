@@ -2,7 +2,7 @@ from flask import Flask, jsonify
 from werkzeug.exceptions import RequestEntityTooLarge
 
 from app.extensions import db, jwt, migrate
-from app.models import Business, SalesRecord, Upload, User  # noqa: F401
+from app.models import Business, Forecast, ForecastRun, SalesRecord, Upload, User  # noqa: F401
 from app.routes import api_blueprint
 from config import Config
 
