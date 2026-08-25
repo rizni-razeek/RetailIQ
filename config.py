@@ -27,3 +27,4 @@ class Config:
     STOCK_OVERSTOCK_MULTIPLIER = float(
         os.getenv("STOCK_OVERSTOCK_MULTIPLIER", "1.5")
     )
+    ANOMALY_Z_THRESHOLD = float(os.getenv("ANOMALY_Z_THRESHOLD", "2.0"))

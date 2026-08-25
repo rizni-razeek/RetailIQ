@@ -6,7 +6,11 @@ from sqlalchemy import func
 
 from app.extensions import db
 from app.models import Forecast, ForecastRun, SalesRecord
-from app.services.feature_service import FEATURE_COLUMNS, build_forecast_features
+from app.services.feature_service import (
+    build_forecast_features,
+    get_supported_model_families,
+    validate_model_features,
+)
 
 
 MINIMUM_HISTORY_DAYS = 28
@@ -20,32 +24,6 @@ class InsufficientHistoryError(ForecastingError):
     def __init__(self, excluded_families):
         super().__init__("No family has sufficient history for forecasting.")
         self.excluded_families = excluded_families
-
-
-def _validate_model_features(model):
-    model_columns = getattr(model, "feature_names_in_", None)
-    if model_columns is None or tuple(model_columns) != FEATURE_COLUMNS:
-        raise ForecastingError("The forecasting model feature schema is incompatible.")
-
-
-def _supported_model_families(model):
-    preprocessing = getattr(model, "named_steps", {}).get("preprocessing")
-    transformers = getattr(preprocessing, "transformers_", ())
-
-    for _name, transformer, columns in transformers:
-        transformer_columns = [columns] if isinstance(columns, str) else list(columns)
-        if "family" not in transformer_columns:
-            continue
-
-        categories = getattr(transformer, "categories_", None)
-        family_index = transformer_columns.index("family")
-        if categories is None or family_index >= len(categories):
-            break
-        return {str(category) for category in categories[family_index]}
-
-    raise ForecastingError(
-        "The forecasting model's supported family categories are unavailable."
-    )
 
 
 def _load_aggregated_history(business_id, upload_id):
@@ -119,8 +97,11 @@ def generate_forecast(
     model,
     future_onpromotion=0.0,
 ):
-    _validate_model_features(model)
-    supported_families = _supported_model_families(model)
+    try:
+        validate_model_features(model)
+        supported_families = get_supported_model_families(model)
+    except ValueError as error:
+        raise ForecastingError(str(error)) from error
     history_by_family = _load_aggregated_history(business_id, upload_id)
     if not history_by_family:
         raise InsufficientHistoryError([])
