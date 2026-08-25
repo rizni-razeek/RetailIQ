@@ -39,3 +39,8 @@ class Business(db.Model):
         back_populates="business",
         cascade="all, delete-orphan",
     )
+    inventory = db.relationship(
+        "Inventory",
+        back_populates="business",
+        cascade="all, delete-orphan",
+    )

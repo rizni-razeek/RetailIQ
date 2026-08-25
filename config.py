@@ -24,3 +24,6 @@ class Config:
     UPLOAD_FOLDER = DEFAULT_UPLOAD_FOLDER
     MODEL_PATH = BASE_DIR / "model" / "retailiq_final_model.pkl"
     FORECAST_FUTURE_ONPROMOTION = 0.0
+    STOCK_OVERSTOCK_MULTIPLIER = float(
+        os.getenv("STOCK_OVERSTOCK_MULTIPLIER", "1.5")
+    )
