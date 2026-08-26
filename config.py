@@ -4,27 +4,64 @@ from pathlib import Path
 
 
 BASE_DIR = Path(__file__).resolve().parent
-UPLOAD_FOLDER_SETTING = Path(os.getenv("UPLOAD_FOLDER", "uploads"))
-DEFAULT_UPLOAD_FOLDER = (
-    UPLOAD_FOLDER_SETTING
-    if UPLOAD_FOLDER_SETTING.is_absolute()
-    else BASE_DIR / UPLOAD_FOLDER_SETTING
-).resolve()
+DEVELOPMENT_SECRET_KEY = "development-only-key"
+DEVELOPMENT_JWT_SECRET_KEY = "development-only-jwt-key-change-before-production"
+
+
+def _configured_path(variable_name, default):
+    configured_path = Path(os.getenv(variable_name, default))
+    if not configured_path.is_absolute():
+        configured_path = BASE_DIR / configured_path
+    return configured_path.resolve()
 
 
 class Config:
-    SECRET_KEY = os.getenv("SECRET_KEY", "development-only-key")
-    JWT_SECRET_KEY = os.getenv(
-        "JWT_SECRET_KEY", "development-only-jwt-key-change-before-production"
-    )
+    APP_ENV = os.getenv(
+        "APP_ENV", os.getenv("FLASK_ENV", "development")
+    ).strip().lower()
+    SECRET_KEY = os.getenv("SECRET_KEY", DEVELOPMENT_SECRET_KEY)
+    JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", DEVELOPMENT_JWT_SECRET_KEY)
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///retailiq.db")
+    DATABASE_URL = os.getenv("DATABASE_URL")
+    SQLALCHEMY_DATABASE_URI = DATABASE_URL or "sqlite:///retailiq.db"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     MAX_CONTENT_LENGTH = int(os.getenv("MAX_UPLOAD_SIZE_MB", "10")) * 1024 * 1024
-    UPLOAD_FOLDER = DEFAULT_UPLOAD_FOLDER
-    MODEL_PATH = BASE_DIR / "model" / "retailiq_final_model.pkl"
+    UPLOAD_FOLDER = _configured_path("UPLOAD_FOLDER", "uploads")
+    MODEL_PATH = _configured_path(
+        "MODEL_PATH", "model/retailiq_final_model.pkl"
+    )
     FORECAST_FUTURE_ONPROMOTION = 0.0
     STOCK_OVERSTOCK_MULTIPLIER = float(
         os.getenv("STOCK_OVERSTOCK_MULTIPLIER", "1.5")
     )
     ANOMALY_Z_THRESHOLD = float(os.getenv("ANOMALY_Z_THRESHOLD", "2.0"))
+
+
+def validate_production_config(app):
+    app_environment = str(app.config.get("APP_ENV", "development")).strip().lower()
+    app.config["APP_ENV"] = app_environment
+    if app_environment != "production":
+        return
+
+    def insecure_secret(value, development_value):
+        return (
+            not value
+            or value == development_value
+            or str(value).startswith("replace-with-")
+        )
+
+    missing = []
+    if not app.config.get("DATABASE_URL"):
+        missing.append("DATABASE_URL")
+    if insecure_secret(app.config.get("SECRET_KEY"), DEVELOPMENT_SECRET_KEY):
+        missing.append("SECRET_KEY")
+    if insecure_secret(
+        app.config.get("JWT_SECRET_KEY"), DEVELOPMENT_JWT_SECRET_KEY
+    ):
+        missing.append("JWT_SECRET_KEY")
+
+    if missing:
+        names = ", ".join(missing)
+        raise RuntimeError(f"Missing required production configuration: {names}")
+
+    app.config["DEBUG"] = False

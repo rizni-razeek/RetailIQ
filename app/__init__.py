@@ -12,7 +12,7 @@ from app.models import (  # noqa: F401
     User,
 )
 from app.routes import api_blueprint
-from config import Config
+from config import Config, validate_production_config
 
 
 def create_app(test_config=None):
@@ -21,6 +21,8 @@ def create_app(test_config=None):
 
     if test_config:
         app.config.from_mapping(test_config)
+
+    validate_production_config(app)
 
     db.init_app(app)
     migrate.init_app(app, db)
