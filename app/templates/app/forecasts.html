@@ -1,0 +1,28 @@
+{% extends "app/app_base.html" %}
+
+{% block workspace_content %}
+<header class="page-heading"><div><h1>Forecasts</h1><p>Generate category demand from a validated historical dataset.</p></div></header>
+
+<section class="workflow-section" aria-labelledby="generate-title">
+  <div class="section-heading"><div><h2 id="generate-title">Generate a forecast</h2><p>Choose the source history and planning horizon.</p></div></div>
+  <form class="form-grid" data-forecast-form novalidate>
+    <div class="form-field"><label for="forecast-upload">Source upload</label><select id="forecast-upload" name="upload_id" required><option value="">Select an upload</option></select><p class="field-hint">Only uploads in your business workspace are available.</p></div>
+    <fieldset class="form-field horizon-field"><legend>Forecast horizon</legend><div class="segmented-control">
+      <label><input type="radio" name="horizon" value="7" checked><span>7 days</span></label>
+      <label><input type="radio" name="horizon" value="14"><span>14 days</span></label>
+      <label><input type="radio" name="horizon" value="30"><span>30 days</span></label>
+    </div></fieldset>
+    <div class="inline-error form-span" data-form-error role="alert" tabindex="-1" hidden></div>
+    <div class="form-actions form-span"><button class="btn btn-primary" type="submit" data-submit><span class="button-spinner" aria-hidden="true"></span><span data-button-label>Generate forecast</span></button></div>
+  </form>
+  <details class="assumption-note"><summary>Forecast assumptions</summary><p>Predictions are generated recursively. Future <code>onpromotion</code> is zero. Unsupported categories and categories without sufficient history may be excluded. This does not represent measured horizon accuracy.</p></details>
+</section>
+
+<section class="workflow-section" aria-labelledby="runs-title">
+  <div class="section-heading"><div><h2 id="runs-title">Forecast runs</h2><p>Open a run to review its category and daily predictions.</p></div><button class="btn btn-secondary btn-compact" type="button" data-refresh>Refresh</button></div>
+  <div data-forecast-list></div>
+  <div class="detail-panel" data-forecast-detail hidden></div>
+</section>
+{% endblock %}
+
+{% block page_scripts %}<script src="{{ url_for('static', filename='js/forecasts.js') }}" defer></script>{% endblock %}

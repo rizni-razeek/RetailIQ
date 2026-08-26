@@ -42,3 +42,59 @@ def test_dashboard_serves_authenticated_shell_without_fake_data(client):
     assert "/static/js/app.js" in page
     assert "91.7%" not in page
     assert "42 units" not in page
+
+
+def test_operational_frontend_pages_render_with_shared_authenticated_shell(client):
+    pages = {
+        "/uploads": ("data-upload-form", "/static/js/uploads.js"),
+        "/forecasts": ("data-forecast-form", "/static/js/forecasts.js"),
+        "/inventory": ("data-inventory-form", "/static/js/inventory.js"),
+        "/stock-intelligence": ("data-stock-form", "/static/js/stock_intelligence.js"),
+        "/anomalies": ("data-anomaly-form", "/static/js/anomalies.js"),
+    }
+
+    for path, (marker, script) in pages.items():
+        response = client.get(path)
+        page = response.get_data(as_text=True)
+
+        assert response.status_code == 200
+        assert 'id="app-sidebar"' in page
+        assert "data-page-content" in page
+        assert marker in page
+        assert script in page
+        assert "/static/js/app.js" in page
+        assert "/static/js/workspace.js" in page
+        assert "91.7%" not in page
+
+
+def test_operational_navigation_links_to_real_pages(client):
+    page = client.get("/uploads").get_data(as_text=True)
+
+    for path in (
+        "/uploads",
+        "/forecasts",
+        "/inventory",
+        "/stock-intelligence",
+        "/anomalies",
+    ):
+        assert f'href="{path}"' in page
+
+    assert 'data-unavailable-view="Analytics"' in page
+
+
+def test_upload_page_documents_the_real_csv_contract(client):
+    page = client.get("/uploads").get_data(as_text=True)
+
+    for column in ("date", "family", "sales", "onpromotion"):
+        assert f"<code>{column}</code>" in page
+    assert "Maximum 10 MB" in page
+
+
+def test_operational_pages_include_important_interpretation_limits(client):
+    forecast_page = client.get("/forecasts").get_data(as_text=True)
+    stock_page = client.get("/stock-intelligence").get_data(as_text=True)
+    anomaly_page = client.get("/anomalies").get_data(as_text=True)
+
+    assert "does not represent measured horizon accuracy" in forecast_page
+    assert "prototype overstock rule" in stock_page
+    assert "do not establish a cause" in anomaly_page

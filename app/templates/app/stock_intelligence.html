@@ -1,0 +1,21 @@
+{% extends "app/app_base.html" %}
+
+{% block workspace_content %}
+<header class="page-heading"><div><h1>Stock Intelligence</h1><p>Compare current category stock with an existing demand forecast.</p></div></header>
+
+<section class="workflow-section" aria-labelledby="stock-run-title">
+  <div class="section-heading"><div><h2 id="stock-run-title">Assess a forecast run</h2><p>The backend applies the configured prototype overstock rule.</p></div></div>
+  <form class="compact-workflow-form" data-stock-form novalidate>
+    <div class="form-field"><label for="stock-forecast-run">Forecast run</label><select id="stock-forecast-run" name="forecast_run_id" required><option value="">Select a forecast run</option></select></div>
+    <button class="btn btn-primary" type="submit" data-submit><span class="button-spinner" aria-hidden="true"></span><span data-button-label>Run stock intelligence</span></button>
+  </form>
+  <div class="inline-error" data-form-error role="alert" tabindex="-1" hidden></div>
+</section>
+
+<section class="workflow-section" aria-labelledby="stock-results-title">
+  <div class="section-heading"><div><h2 id="stock-results-title">Classification results</h2><p>Missing inventory is reported explicitly and is never estimated.</p></div></div>
+  <div data-stock-results></div>
+</section>
+{% endblock %}
+
+{% block page_scripts %}<script src="{{ url_for('static', filename='js/stock_intelligence.js') }}" defer></script>{% endblock %}

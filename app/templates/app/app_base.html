@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_name }} · RetailIQ{% endblock %}
+{% block body_class %}app-page{% endblock %}
+
+{% block body %}
+<div class="app-shell">
+  <button class="sidebar-scrim" type="button" data-sidebar-close aria-label="Close navigation" tabindex="-1"></button>
+  <aside class="sidebar" id="app-sidebar" aria-label="Primary navigation">
+    <div class="sidebar-header">
+      <a class="wordmark" href="{{ url_for('pages.dashboard') }}" aria-label="RetailIQ dashboard">
+        <svg class="brand-icon" aria-hidden="true"><use href="#icon-brand"></use></svg>
+        <span>RetailIQ</span>
+      </a>
+      <button class="icon-button sidebar-close" type="button" data-sidebar-close aria-label="Close navigation">
+        <svg class="icon" aria-hidden="true"><use href="#icon-close"></use></svg>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <p class="nav-section-label">Main</p>
+        <a class="nav-item{% if active_page == 'dashboard' %} active{% endif %}" href="{{ url_for('pages.dashboard') }}"{% if active_page == 'dashboard' %} aria-current="page"{% endif %}>
+          <svg class="nav-icon" aria-hidden="true"><use href="#icon-dashboard"></use></svg><span>Dashboard</span>
+        </a>
+        <a class="nav-item{% if active_page == 'uploads' %} active{% endif %}" href="{{ url_for('pages.uploads') }}"{% if active_page == 'uploads' %} aria-current="page"{% endif %}>
+          <svg class="nav-icon" aria-hidden="true"><use href="#icon-upload"></use></svg><span>Uploads</span>
+        </a>
+        <a class="nav-item{% if active_page == 'forecasts' %} active{% endif %}" href="{{ url_for('pages.forecasts') }}"{% if active_page == 'forecasts' %} aria-current="page"{% endif %}>
+          <svg class="nav-icon" aria-hidden="true"><use href="#icon-forecast"></use></svg><span>Forecasts</span>
+        </a>
+        <a class="nav-item{% if active_page == 'inventory' %} active{% endif %}" href="{{ url_for('pages.inventory') }}"{% if active_page == 'inventory' %} aria-current="page"{% endif %}>
+          <svg class="nav-icon" aria-hidden="true"><use href="#icon-inventory"></use></svg><span>Inventory</span>
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <p class="nav-section-label">Intelligence</p>
+        <a class="nav-item{% if active_page == 'stock-intelligence' %} active{% endif %}" href="{{ url_for('pages.stock_intelligence') }}"{% if active_page == 'stock-intelligence' %} aria-current="page"{% endif %}>
+          <svg class="nav-icon" aria-hidden="true"><use href="#icon-stock"></use></svg><span>Stock Intelligence</span>
+        </a>
+        <a class="nav-item{% if active_page == 'anomalies' %} active{% endif %}" href="{{ url_for('pages.anomalies') }}"{% if active_page == 'anomalies' %} aria-current="page"{% endif %}>
+          <svg class="nav-icon" aria-hidden="true"><use href="#icon-anomaly"></use></svg><span>Anomalies</span>
+        </a>
+        <button class="nav-item" type="button" data-unavailable-view="Analytics">
+          <svg class="nav-icon" aria-hidden="true"><use href="#icon-analytics"></use></svg><span>Analytics</span>
+        </button>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <p class="nav-section-label">Account</p>
+      <div class="account-summary">
+        <span class="account-avatar" data-user-initial aria-hidden="true">R</span>
+        <span class="account-copy"><strong data-user-name>RetailIQ user</strong><span data-business-name>Business workspace</span></span>
+      </div>
+      <button class="nav-item logout-button" type="button" data-logout>
+        <svg class="nav-icon" aria-hidden="true"><use href="#icon-logout"></use></svg><span>Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="app-workspace">
+    <header class="app-header">
+      <button class="icon-button menu-button" type="button" data-sidebar-open aria-label="Open navigation" aria-controls="app-sidebar" aria-expanded="false">
+        <svg class="icon" aria-hidden="true"><use href="#icon-menu"></use></svg>
+      </button>
+      <div class="workspace-context"><span>RetailIQ</span><span aria-hidden="true">/</span><strong>{{ page_name }}</strong></div>
+      <button class="icon-button theme-button" type="button" data-theme-toggle aria-label="Switch to dark theme">
+        <svg class="icon theme-icon-light" aria-hidden="true"><use href="#icon-moon"></use></svg>
+        <svg class="icon theme-icon-dark" aria-hidden="true"><use href="#icon-sun"></use></svg>
+      </button>
+    </header>
+
+    <main class="workspace-main" id="main-content">
+      <section class="session-loading" data-session-loading aria-live="polite"><span class="large-spinner" aria-hidden="true"></span><p>Restoring your secure session…</p></section>
+      <section class="session-error" data-session-error role="alert" hidden>
+        <svg class="status-icon" aria-hidden="true"><use href="#icon-anomaly"></use></svg>
+        <div><h1>We could not restore your session</h1><p data-session-error-message>Check your connection and try again.</p><button class="btn btn-secondary" type="button" data-session-retry>Try again</button></div>
+      </section>
+      <div class="page-content" data-page-content hidden>{% block workspace_content %}{% endblock %}</div>
+    </main>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/workspace.js') }}" defer></script>
+{% block page_scripts %}{% endblock %}
+{% endblock %}

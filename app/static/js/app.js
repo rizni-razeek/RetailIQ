@@ -9,7 +9,7 @@
   const errorState = document.querySelector("[data-session-error]");
   const errorMessage = document.querySelector("[data-session-error-message]");
   const retryButton = document.querySelector("[data-session-retry]");
-  const content = document.querySelector("[data-dashboard-content]");
+  const content = document.querySelector("[data-page-content]");
 
   function openSidebar() {
     sidebar.removeAttribute("inert");
@@ -59,8 +59,12 @@
         return;
       }
       populateUser(user);
+      window.RetailIQ.currentUser = user;
       loadingState.hidden = true;
       content.hidden = false;
+      document.dispatchEvent(new CustomEvent("retailiq:session-ready", {
+        detail: { user: user },
+      }));
     } catch (error) {
       loadingState.hidden = true;
       errorMessage.textContent = error.message;

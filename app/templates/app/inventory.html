@@ -1,0 +1,22 @@
+{% extends "app/app_base.html" %}
+
+{% block workspace_content %}
+<header class="page-heading"><div><h1>Inventory</h1><p>Maintain one current stock value for each retail category.</p></div></header>
+
+<section class="workflow-section" aria-labelledby="inventory-entry-title">
+  <div class="section-heading"><div><h2 id="inventory-entry-title">Add or update stock</h2><p>Submitting an existing category updates its current value.</p></div></div>
+  <form class="form-grid" data-inventory-form novalidate>
+    <div class="form-field"><label for="inventory-family">Category</label><input id="inventory-family" name="family" type="text" list="inventory-families" autocomplete="off" required placeholder="e.g. BEVERAGES"><datalist id="inventory-families" data-family-options></datalist><p class="field-hint">Use the same category name as your uploaded sales history.</p></div>
+    <div class="form-field"><label for="current-stock">Current stock</label><input class="numeric-input" id="current-stock" name="current_stock" type="number" min="0" step="any" inputmode="decimal" required placeholder="0"><p class="field-hint">Stock and forecast demand must use compatible units.</p></div>
+    <div class="inline-error form-span" data-form-error role="alert" tabindex="-1" hidden></div>
+    <div class="form-actions form-span"><button class="btn btn-primary" type="submit" data-submit><span class="button-spinner" aria-hidden="true"></span><span data-button-label>Save inventory</span></button></div>
+  </form>
+</section>
+
+<section class="workflow-section" aria-labelledby="inventory-list-title">
+  <div class="section-heading"><div><h2 id="inventory-list-title">Current inventory</h2><p>Category-level values in this business workspace.</p></div><button class="btn btn-secondary btn-compact" type="button" data-refresh>Refresh</button></div>
+  <div data-inventory-list></div>
+</section>
+{% endblock %}
+
+{% block page_scripts %}<script src="{{ url_for('static', filename='js/inventory.js') }}" defer></script>{% endblock %}

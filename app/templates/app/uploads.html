@@ -1,0 +1,30 @@
+{% extends "app/app_base.html" %}
+
+{% block workspace_content %}
+<header class="page-heading">
+  <div><h1>Uploads</h1><p>Add validated category-level sales history to your workspace.</p></div>
+</header>
+
+<section class="workflow-section" aria-labelledby="upload-title">
+  <div class="section-heading"><div><h2 id="upload-title">Upload sales history</h2><p>Required columns: <code>date</code>, <code>family</code>, <code>sales</code>. <code>onpromotion</code> is optional and defaults to zero.</p></div></div>
+  <form data-upload-form enctype="multipart/form-data" novalidate>
+    <label class="upload-zone" for="sales-file" data-upload-zone>
+      <input id="sales-file" name="file" type="file" accept=".csv,text/csv" data-file-input required>
+      <svg aria-hidden="true"><use href="#icon-upload"></use></svg>
+      <strong data-file-label>Choose a CSV or drop it here</strong>
+      <span>CSV only · Maximum 10 MB</span>
+    </label>
+    <div class="inline-error" data-form-error role="alert" tabindex="-1" hidden></div>
+    <div class="form-actions"><button class="btn btn-primary" type="submit" data-submit><span class="button-spinner" aria-hidden="true"></span><span data-button-label>Upload and validate</span></button></div>
+  </form>
+  <div class="result-callout" data-upload-result hidden aria-live="polite"></div>
+</section>
+
+<section class="workflow-section" aria-labelledby="history-title">
+  <div class="section-heading"><div><h2 id="history-title">Upload history</h2><p>Select a row to inspect the dataset summary.</p></div><button class="btn btn-secondary btn-compact" type="button" data-refresh>Refresh</button></div>
+  <div data-upload-list></div>
+  <div class="detail-panel" data-upload-detail hidden></div>
+</section>
+{% endblock %}
+
+{% block page_scripts %}<script src="{{ url_for('static', filename='js/uploads.js') }}" defer></script>{% endblock %}
