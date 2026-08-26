@@ -28,6 +28,9 @@
       localStorage.setItem(storageKey, theme);
     }
     updateControls(theme);
+    document.dispatchEvent(new CustomEvent("retailiq:theme-changed", {
+      detail: { theme: theme },
+    }));
   }
 
   applyTheme(preferredTheme(), false);

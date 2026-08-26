@@ -1,12 +1,49 @@
 {% extends "app/app_base.html" %}
 
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+{% endblock %}
+
 {% block workspace_content %}
-<header class="page-heading">
-  <div><h1>Dashboard</h1><p>Your tenant-owned RetailIQ workspace is connected.</p></div>
-  <span class="connection-status"><span aria-hidden="true"></span>Session active</span>
+<header class="page-heading dashboard-heading">
+  <div><h1>Dashboard</h1><p>Latest sales, forecasting and stock activity for <strong data-ready-business>your business workspace</strong>.</p></div>
+  <span class="connection-status"><span aria-hidden="true"></span>Live workspace data</span>
 </header>
-<section class="workspace-empty" aria-labelledby="workspace-ready-title">
-  <div class="workspace-empty-icon" aria-hidden="true"><svg><use href="#icon-check"></use></svg></div>
-  <div><h2 id="workspace-ready-title">Workspace ready</h2><p>Your account and <strong data-ready-business>business workspace</strong> are securely connected. Dashboard analytics arrive in a later frontend pass.</p></div>
+
+<section aria-labelledby="overview-title">
+  <h2 class="sr-only" id="overview-title">Workspace overview</h2>
+  <div class="overview-metrics" data-dashboard-metrics></div>
 </section>
+
+<div class="dashboard-layout">
+  <section class="dashboard-section dashboard-section-wide" aria-labelledby="sales-trend-title">
+    <div class="section-heading"><div><h2 id="sales-trend-title">Recent sales trend</h2><p data-sales-scope>Latest uploaded dataset.</p></div><a class="text-link" href="{{ url_for('pages.analytics') }}">Explore analytics</a></div>
+    <div data-dashboard-sales></div>
+  </section>
+
+  <section class="dashboard-section" aria-labelledby="stock-position-title">
+    <div class="section-heading"><div><h2 id="stock-position-title">Stock position</h2><p>Latest usable forecast run.</p></div></div>
+    <div data-dashboard-stock></div>
+  </section>
+
+  <section class="dashboard-section dashboard-section-wide" aria-labelledby="forecast-overview-title">
+    <div class="section-heading"><div><h2 id="forecast-overview-title">Latest demand forecast</h2><p data-forecast-scope>Category totals from the latest forecast run.</p></div><a class="text-link" href="{{ url_for('pages.forecasts') }}">View forecast runs</a></div>
+    <div data-dashboard-forecast></div>
+  </section>
+
+  <section class="dashboard-section" aria-labelledby="anomaly-overview-title">
+    <div class="section-heading"><div><h2 id="anomaly-overview-title">Anomaly summary</h2><p>Latest eligible historical upload.</p></div></div>
+    <div data-dashboard-anomalies></div>
+  </section>
+
+  <section class="dashboard-section dashboard-section-full" aria-labelledby="activity-title">
+    <div class="section-heading"><div><h2 id="activity-title">Recent operational activity</h2><p>Latest uploads and persisted forecast runs.</p></div></div>
+    <div data-dashboard-activity></div>
+  </section>
+</div>
+{% endblock %}
+
+{% block page_scripts %}
+<script src="{{ url_for('static', filename='js/charts.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}" defer></script>
 {% endblock %}

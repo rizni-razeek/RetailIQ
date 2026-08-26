@@ -59,3 +59,10 @@ def anomalies():
     return render_template(
         "app/anomalies.html", active_page="anomalies", page_name="Anomalies"
     )
+
+
+@pages_blueprint.get("/analytics")
+def analytics():
+    return render_template(
+        "app/analytics.html", active_page="analytics", page_name="Analytics"
+    )

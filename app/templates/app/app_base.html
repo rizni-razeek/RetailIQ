@@ -42,9 +42,9 @@
         <a class="nav-item{% if active_page == 'anomalies' %} active{% endif %}" href="{{ url_for('pages.anomalies') }}"{% if active_page == 'anomalies' %} aria-current="page"{% endif %}>
           <svg class="nav-icon" aria-hidden="true"><use href="#icon-anomaly"></use></svg><span>Anomalies</span>
         </a>
-        <button class="nav-item" type="button" data-unavailable-view="Analytics">
+        <a class="nav-item{% if active_page == 'analytics' %} active{% endif %}" href="{{ url_for('pages.analytics') }}"{% if active_page == 'analytics' %} aria-current="page"{% endif %}>
           <svg class="nav-icon" aria-hidden="true"><use href="#icon-analytics"></use></svg><span>Analytics</span>
-        </button>
+        </a>
       </div>
     </nav>
 

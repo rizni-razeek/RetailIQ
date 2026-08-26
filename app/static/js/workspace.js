@@ -32,6 +32,15 @@
       : { dateStyle: "medium" }).format(date);
   }
 
+  function formatDateOnly(value) {
+    if (!value) return "—";
+    const parts = String(value).split("-").map(Number);
+    if (parts.length !== 3 || parts.some(Number.isNaN)) return String(value);
+    return new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(
+      new Date(parts[0], parts[1] - 1, parts[2])
+    );
+  }
+
   function setState(container, options) {
     if (!container) return;
     container.replaceChildren();
@@ -87,6 +96,7 @@
     configureTable: configureTable,
     errorMessage: errorMessage,
     formatDate: formatDate,
+    formatDateOnly: formatDateOnly,
     formatNumber: formatNumber,
     formatPercent: formatPercent,
     onSessionReady: onSessionReady,

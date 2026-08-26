@@ -40,6 +40,13 @@ def test_dashboard_serves_authenticated_shell_without_fake_data(client):
     assert "Analytics" in page
     assert 'data-logout' in page
     assert "/static/js/app.js" in page
+    assert "/static/js/charts.js" in page
+    assert "/static/js/dashboard.js" in page
+    assert "data-dashboard-metrics" in page
+    assert "data-dashboard-sales" in page
+    assert "data-dashboard-forecast" in page
+    assert "Dashboard analytics arrive in a later frontend pass" not in page
+    assert "Forecast Accuracy" not in page
     assert "91.7%" not in page
     assert "42 units" not in page
 
@@ -76,10 +83,38 @@ def test_operational_navigation_links_to_real_pages(client):
         "/inventory",
         "/stock-intelligence",
         "/anomalies",
+        "/analytics",
     ):
         assert f'href="{path}"' in page
 
-    assert 'data-unavailable-view="Analytics"' in page
+    assert 'data-unavailable-view="Analytics"' not in page
+
+
+def test_analytics_page_renders_filters_charts_and_active_navigation(client):
+    response = client.get("/analytics")
+    page = response.get_data(as_text=True)
+
+    assert response.status_code == 200
+    assert 'data-analytics-upload' in page
+    assert 'data-analytics-family' in page
+    assert 'data-analytics-forecast-select' in page
+    assert 'data-analytics-sales' in page
+    assert 'data-analytics-categories' in page
+    assert 'data-analytics-stock' in page
+    assert 'data-analytics-anomalies' in page
+    assert "/static/js/charts.js" in page
+    assert "/static/js/analytics.js" in page
+    assert 'href="/analytics" aria-current="page"' in page
+    assert "Forecast Accuracy" not in page
+    assert "revenue" not in page.lower()
+
+
+def test_chart_pages_pin_chartjs_without_frontend_build_tooling(client):
+    for path in ("/dashboard", "/analytics"):
+        page = client.get(path).get_data(as_text=True)
+
+        assert "chart.js@4.4.7" in page
+        assert "node_modules" not in page
 
 
 def test_upload_page_documents_the_real_csv_contract(client):

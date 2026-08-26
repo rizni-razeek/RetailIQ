@@ -1,0 +1,48 @@
+{% extends "app/app_base.html" %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+{% endblock %}
+
+{% block workspace_content %}
+<header class="page-heading">
+  <div><h1>Analytics</h1><p>Explore historical sales, forecasts, stock classifications and anomaly summaries.</p></div>
+</header>
+
+<section class="analytics-controls" aria-labelledby="analytics-controls-title">
+  <h2 class="sr-only" id="analytics-controls-title">Analytics filters</h2>
+  <div class="form-field"><label for="analytics-upload">Historical upload</label><select id="analytics-upload" data-analytics-upload><option value="">Loading uploads…</option></select></div>
+  <div class="form-field"><label for="analytics-family">Category</label><select id="analytics-family" data-analytics-family disabled><option value="">All categories</option></select></div>
+  <div class="form-field"><label for="analytics-forecast">Forecast run</label><select id="analytics-forecast" data-analytics-forecast-select><option value="">Loading forecast runs…</option></select></div>
+</section>
+
+<section class="analytics-section" aria-labelledby="analytics-sales-title">
+  <div class="section-heading"><div><h2 id="analytics-sales-title">Sales trends</h2><p>Daily historical sales from the selected upload.</p></div></div>
+  <div data-analytics-sales></div>
+</section>
+
+<section class="analytics-section" aria-labelledby="analytics-categories-title">
+  <div class="section-heading"><div><h2 id="analytics-categories-title">Category sales breakdown</h2><p>Recorded sales aggregated by category for the selected upload.</p></div></div>
+  <div data-analytics-categories></div>
+</section>
+
+<section class="analytics-section" aria-labelledby="analytics-forecast-title">
+  <div class="section-heading"><div><h2 id="analytics-forecast-title">Forecast summary</h2><p>Category demand totals and daily prediction ranges for the selected run.</p></div></div>
+  <div data-analytics-forecast></div>
+</section>
+
+<section class="analytics-section" aria-labelledby="analytics-stock-title">
+  <div class="section-heading"><div><h2 id="analytics-stock-title">Stock summary</h2><p>Current inventory compared with predicted demand using the configured prototype rule.</p></div></div>
+  <div data-analytics-stock></div>
+</section>
+
+<section class="analytics-section" aria-labelledby="analytics-anomaly-title">
+  <div class="section-heading"><div><h2 id="analytics-anomaly-title">Anomaly summary</h2><p>Unusual historical residuals for the selected upload; no cause is inferred.</p></div></div>
+  <div data-analytics-anomalies></div>
+</section>
+{% endblock %}
+
+{% block page_scripts %}
+<script src="{{ url_for('static', filename='js/charts.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/analytics.js') }}" defer></script>
+{% endblock %}
