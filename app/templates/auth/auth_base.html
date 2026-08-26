@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block body_class %}auth-page{% endblock %}
+{% block body_attributes %}data-auth-page="{% block auth_page %}{% endblock %}"{% endblock %}
+
+{% block body %}
+<main class="auth-layout" id="main-content">
+  <aside class="auth-brand" aria-label="RetailIQ introduction">
+    <a class="wordmark wordmark-inverse" href="{{ url_for('pages.login') }}" aria-label="RetailIQ login">
+      <svg class="brand-icon" aria-hidden="true"><use href="#icon-brand"></use></svg>
+      <span>RetailIQ</span>
+    </a>
+    <div class="auth-brand-copy">
+      <h1>Stock decisions,<br>grounded in demand.</h1>
+      <p>Turn your own sales history into category forecasts and clearer inventory decisions.</p>
+    </div>
+    <ol class="auth-process" aria-label="RetailIQ workflow">
+      <li><span class="data-value">01</span><span>Upload POS sales history</span></li>
+      <li><span class="data-value">02</span><span>Forecast category demand</span></li>
+      <li><span class="data-value">03</span><span>Compare demand with current stock</span></li>
+    </ol>
+  </aside>
+
+  <section class="auth-panel" aria-labelledby="auth-title">
+    <header class="auth-panel-header">
+      <a class="wordmark auth-mobile-brand" href="{{ url_for('pages.login') }}" aria-label="RetailIQ login">
+        <svg class="brand-icon" aria-hidden="true"><use href="#icon-brand"></use></svg>
+        <span>RetailIQ</span>
+      </a>
+      <button class="icon-button theme-button" type="button" data-theme-toggle aria-label="Switch to dark theme">
+        <svg class="icon theme-icon-light" aria-hidden="true"><use href="#icon-moon"></use></svg>
+        <svg class="icon theme-icon-dark" aria-hidden="true"><use href="#icon-sun"></use></svg>
+      </button>
+    </header>
+    <div class="auth-form-wrap">
+      {% block auth_content %}{% endblock %}
+    </div>
+  </section>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/auth.js') }}" defer></script>
+{% endblock %}

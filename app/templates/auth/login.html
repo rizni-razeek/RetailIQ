@@ -1,0 +1,33 @@
+{% extends "auth/auth_base.html" %}
+
+{% block title %}Sign in · RetailIQ{% endblock %}
+{% block auth_page %}login{% endblock %}
+
+{% block auth_content %}
+<div class="auth-heading">
+  <h1 id="auth-title">Sign in to RetailIQ</h1>
+  <p>Continue to your business workspace.</p>
+</div>
+
+<div class="form-error" data-form-error role="alert" tabindex="-1" hidden></div>
+
+<form class="auth-form" data-auth-form="login">
+  <div class="form-group">
+    <label class="form-label" for="email">Email address</label>
+    <input class="input" id="email" name="email" type="email" autocomplete="email" inputmode="email" required autofocus>
+  </div>
+  <div class="form-group">
+    <div class="label-row">
+      <label class="form-label" for="password">Password</label>
+      <button class="text-button" type="button" data-password-toggle aria-controls="password">Show password</button>
+    </div>
+    <input class="input" id="password" name="password" type="password" autocomplete="current-password" required>
+  </div>
+  <button class="btn btn-primary btn-block" type="submit" data-submit-button>
+    <span data-button-label>Sign in</span>
+    <span class="button-spinner" aria-hidden="true"></span>
+  </button>
+</form>
+
+<p class="auth-switch">New to RetailIQ? <a href="{{ url_for('pages.register') }}">Create a business account</a></p>
+{% endblock %}

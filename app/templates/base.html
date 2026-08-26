@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>{% block title %}RetailIQ{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Figtree:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}" {% block body_attributes %}{% endblock %}>
+  <!--
+  THESIS: RetailIQ is a calm operating ledger, not a promotional SaaS shell.
+  OWN-WORLD: Warm green-neutral surfaces, editorial headings, precise UI type, restrained borders, and semantic status colour only.
+  STORY: Authenticate, establish the tenant-owned workspace, and reveal only real operational destinations.
+  FIRST VIEWPORT: A focused auth task or a persistent navigation rail beside one clear workspace state, with the primary action in the reading path.
+  FORM: Established RetailIQ design-system extension; source key RETAILIQ-DS-V1.
+  FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+  -->
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  {% include "partials/icon_sprite.html" %}
+  <div class="global-loader" data-global-loader aria-hidden="true"></div>
+  {% block body %}{% endblock %}
+  <div class="toast-region" data-toast-region aria-live="polite" aria-atomic="false"></div>
+  <script src="{{ url_for('static', filename='js/ui.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/api.js') }}" defer></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -12,6 +12,7 @@ from app.models import (  # noqa: F401
     User,
 )
 from app.routes import api_blueprint
+from app.routes.pages import pages_blueprint
 from config import Config, validate_production_config
 
 
@@ -28,6 +29,7 @@ def create_app(test_config=None):
     migrate.init_app(app, db)
     jwt.init_app(app)
 
+    app.register_blueprint(pages_blueprint)
     app.register_blueprint(api_blueprint, url_prefix="/api")
 
     @app.errorhandler(RequestEntityTooLarge)
