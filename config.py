@@ -30,6 +30,9 @@ class Config:
     MODEL_PATH = _configured_path(
         "MODEL_PATH", "model/retailiq_final_model.pkl"
     )
+    HF_MODEL_REPO = os.getenv("HF_MODEL_REPO", "").strip()
+    HF_MODEL_FILENAME = os.getenv("HF_MODEL_FILENAME", "").strip()
+    HF_TOKEN = os.getenv("HF_TOKEN", "").strip()
     FORECAST_FUTURE_ONPROMOTION = 0.0
     STOCK_OVERSTOCK_MULTIPLIER = float(
         os.getenv("STOCK_OVERSTOCK_MULTIPLIER", "1.5")
